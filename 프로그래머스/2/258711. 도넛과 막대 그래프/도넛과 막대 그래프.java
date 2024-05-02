@@ -4,7 +4,7 @@ import java.util.Map;
 
 class Solution {
     public int[] solution(int[][] edges) {
-        Map<Integer, int[]> nodeCnt = new HashMap<>();
+        Map<Integer, int[]> nodeCnt = new HashMap<>(); // key: node, value: int[0]-> 나가는 엣지 수, int[1]-> 들어오는 엣지 수
         int[] answer = {0, 0, 0, 0};
         Arrays.stream(edges).forEach(edge -> {
             int a = edge[0];
@@ -22,15 +22,16 @@ class Solution {
         int[] cnts;
         for (Integer key : nodeCnt.keySet()) {
             cnts = nodeCnt.get(key);
-            if (cnts[0] >= 2 && cnts[1] == 0) {
+            if (cnts[0] >= 2 && cnts[1] == 0) { // 나가는 엣지가 2개 이상, 들어오는 엣지 0개
                 answer[0] = key;
-            } else if (cnts[0] == 0 && cnts[1] > 0) {
+            } else if (cnts[0] == 0) { // 나가는 엣지 0개
                 answer[2]++;
-            } else if (cnts[0] >= 2 && cnts[1] >= 2) {
+            } else if (cnts[0] == 2 && cnts[1] >= 2) { // 나가는 엣지 2개, 들어오는 엣지 2개 이상(생성된 정점 고려)
                 answer[3]++;
             }
         }
-        answer[1] = nodeCnt.get(answer[0])[0] - answer[2] - answer[3];
+        int total = nodeCnt.get(answer[0])[0]; // 생성된 정점의 나가는 엣지 수가 전체 그래프 수와 같다.
+        answer[1] = total - answer[2] - answer[3];
         return answer;
     }
 }
