@@ -11,16 +11,19 @@ class Solution
         for (int t = 1; t <= testcase; t++) {
             int n = Integer.parseInt(br.readLine());
             int sum = 0;
-            for (int i = 0; i <= n/2; i++) {
+            int start = n/2;
+            int end = n/2;
+            for (int i = 0; i < n; i++) {
                 String line = br.readLine();
-                for (int j = n / 2 - i; j <= n / 2 + i; j++) {
+                for (int j = start; j <= end; j++) {
                     sum += line.charAt(j) - '0';
                 }
-            }
-            for (int i = n / 2 + 1; i < n; i++) {
-                String line = br.readLine();
-                for (int j = i - n / 2; j < n - i + n/2; j++) {
-                    sum += line.charAt(j) - '0';
+                if (i < n / 2) {
+                    start--;
+                    end++;
+                }else{
+                    start++;
+                    end--;
                 }
             }
             sb.append("#").append(t).append(" ").append(sum).append("\n");
@@ -28,17 +31,3 @@ class Solution
         System.out.println(sb);
     }
 }
-/**
- * 0 1 2 3 4
- *
- * 2 1 0 1 2
- * 2 3 4 3 2
- *
- * 0 1 2 3 4 5 6
- *
- * 3 2 1 0 1 2 3
- * 3 4 5 6 5 4 3
- */
-/**
- * n - i + n/2
- */
