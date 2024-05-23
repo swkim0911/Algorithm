@@ -1,59 +1,53 @@
 import java.util.*;
 
 class Solution {
+
     int n, m;
-    int[] oil;
+    int[] dx = {-1, 0, 1, 0};
+    int[] dy = {0, -1, 0, 1};
+    int[] oils; // oils[i]: i+1 열에 시추관을 설치했을 때 얻을 수 있는 석유량
 
-    int[] dx = {-1, 1, 0, 0};
-    int[] dy = {0, 0, -1, 1};
-
+    boolean[][] visited;
     public int solution(int[][] land) {
-        int answer = 0;
-
         n = land.length;
         m = land[0].length;
-        oil = new int[m];
-
-        boolean[][] visited = new boolean[n][m];
+        oils = new int[m];
+        visited = new boolean[n][m];
 
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                if (land[i][j] == 1 && !visited[i][j]) {
-                    bfs(land, visited, i, j);
-                }
+                if (land[i][j] == 0 || visited[i][j]) continue;
+                bfs(i, j, land);
             }
         }
-        answer = Arrays.stream(oil).max().getAsInt();
-        return answer;
-    }
 
-    public void bfs(int[][] land, boolean[][] visited, int x, int y) {
+        return Arrays.stream(oils).max().getAsInt();
+    }
+    public void bfs(int x, int y, int[][] land) {
         Queue<Pair> q = new LinkedList<>();
-        q.add(new Pair(x,y));
+        Set<Integer> set = new HashSet<>(); // 한 덩어리의 석유가 위치하는 열(y)들의 집합
+        q.add(new Pair(x, y));
         visited[x][y] = true;
-        int count = 1;
-        Set<Integer> set = new HashSet<>();
+        int sum = 1;
 
         while (!q.isEmpty()) {
             Pair cur = q.poll();
-            set.add(cur.y);
-
+            set.add(cur.y); // 현재 땅의 열(y) 위치를 set에 저장
             for (int i = 0; i < 4; i++) {
                 int nx = cur.x + dx[i];
                 int ny = cur.y + dy[i];
-                if (nx < 0 || nx >= n || ny < 0 || ny >= m)continue;
-                if (land[nx][ny] == 1 && !visited[nx][ny]) {
-                    q.add(new Pair(nx,ny));
-                    visited[nx][ny] = true;
-                    count += 1;
-                }
+                if(nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
+                if(land[nx][ny] == 0 || visited[nx][ny]) continue;
+                sum++;
+                visited[nx][ny] = true;
+                q.add(new Pair(nx, ny));
             }
         }
-
-        for (int index : set) {
-            oil[index] += count;
+        for (Integer col : set) {
+            oils[col] += sum;
         }
     }
+
 }
 
  class Pair{
