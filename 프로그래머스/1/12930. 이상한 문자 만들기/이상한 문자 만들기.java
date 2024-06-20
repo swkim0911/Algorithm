@@ -9,16 +9,12 @@ class Solution {
                 cnt = 0;
                 continue;
             }
-            if(Character.isLetter(c)){
-                if(cnt % 2 == 0){
-                    sb.append(Character.toUpperCase(c));
-                }else{
-                    sb.append(Character.toLowerCase(c));
-                }          
-                cnt++;
+            if(cnt % 2 == 0){
+                sb.append(Character.toUpperCase(c));
             }else{
-                sb.append(c);
-            }  
+                sb.append(Character.toLowerCase(c));
+            }          
+            cnt++; 
         }
         
         return sb.toString();
