@@ -14,7 +14,7 @@ class Solution {
         boolean flag = true;
         while(flag){
             
-            int minTime = 0;
+            int minTime = 0; // 진행되고 있는 시간
             boolean isProcessing = true;
             
             while(true){
@@ -43,13 +43,14 @@ class Solution {
                     }
                 }
                 
+                // 기존에 과제가 진행 중인데 새로운 과제를 시작할 시각이 되었을 때
                 if(!pq.isEmpty() && (curTime + minTime) == pq.peek().start){
                     if(isProcessing){
                         cur.playTime -= minTime;
                         stack.add(cur);
                     }
                     cur = pq.poll();
-                    curTime += minTime;
+                    curTime = cur.start;
                     break;
                 }
                 
