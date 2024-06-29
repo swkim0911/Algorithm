@@ -5,7 +5,7 @@ class Solution {
         long answer = 0;
         Arrays.sort(times);
         long left = 0;
-        long right = times[times.length-1] * (long)n;
+        long right = times[times.length-1] * (long)n; // 최악의 경우
         while(left <= right){
             long mid = (left + right) / 2;
             long complete = 0;
@@ -19,6 +19,7 @@ class Solution {
                 answer = mid;
             }
         }
+        
         return answer;
     }
 }
