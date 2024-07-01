@@ -20,7 +20,7 @@ class Solution {
     
     
     public int countRemovedRocks(int min, int distance, int[] rocks){
-        int cnt = 0; // 최서 거리가 min일 때 제거해야 할 돌의 개수
+        int cnt = 0; // 최소 거리가 min일 때 제거해야 할 돌의 개수
         int cur = 0; // 기준이 되는 돌의 위치
         for(int rock : rocks){
             if(rock - cur < min) cnt++;
