@@ -2,7 +2,7 @@ import java.util.*;
 
 class Solution {
     public int solution(int[][] jobs) {
-        // 먼저 도착한 것을 빠르게 처리 하기 위함.
+        // 작업의 요청부터 종료까지 걸린 시간↓ -> 먼저 도착한 것을 빠르게 처리 하기 위함.
         Arrays.sort(jobs, (o1,o2) -> o1[0] - o2[0]); // 요청되는 시점 오름차순 정렬
         PriorityQueue<int[]> pq = new PriorityQueue<>((o1,o2) -> o1[1] - o2[1]); // 소요 시간 오름차순
         int index = 0;
