@@ -1,13 +1,20 @@
 class Solution {
     public int[] solution(int n, int m) {
-        int min = Math.min(n,m);
-        int ans1 = 0;
-        for(int i = 1; i <= min; i++){
-            if(n%i == 0 && m%i == 0) ans1 = i;
-        }
-        int ans2 = ans1 * (n / ans1) * (m / ans1);
-        int[] answer = new int[]{ans1,ans2};
+        
+        int gcd = n > m ? getGcd(n,m) : getGcd(m,n);
+        int[] answer = {gcd, n*m / gcd};
+        
         
         return answer;
+    }
+    
+    // 최대공약수 (a > b)
+    public int getGcd(int a, int b){
+        while(b != 0){
+            int tmp = b;
+            b = a % b;
+            a = tmp;
+        }
+        return a;
     }
 }
