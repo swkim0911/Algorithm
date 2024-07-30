@@ -7,32 +7,20 @@ class Solution {
     
     public int solution(int k, int[][] dungeons) {
         visited = new boolean[dungeons.length];
-        dfs(k, new ArrayList<>(), dungeons);
+        dfs(k, dungeons, 0);
         return answer;
     }
     
-    public void dfs(int k, List<Integer> list, int[][]dungeons){
-        // 종료 조건
-        if(list.size() == dungeons.length){
-            for(int i = 0; i < list.size(); i++){
-                if(k < dungeons[list.get(i)][0]){
-                    answer = Math.max(answer, i);
-                    return;
-                }
-                k -= dungeons[list.get(i)][1];
-            }
-            answer = Math.max(answer, list.size());
-            return;
-        }
+    public void dfs(int k, int[][]dungeons, int cnt){
         
         for(int i = 0; i < dungeons.length; i++){
             if(visited[i]) continue;
+            if(k < dungeons[i][0]) continue;
             visited[i] = true;
-            List<Integer> tmp = new ArrayList<>(list);
-            tmp.add(i);
-            dfs(k, tmp, dungeons);
+            dfs(k - dungeons[i][1] ,dungeons, cnt + 1);
             visited[i] = false;
         }
+        answer = Math.max(answer, cnt);
     }
 }
 
