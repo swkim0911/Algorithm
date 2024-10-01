@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 public class Main {
 
@@ -11,30 +10,25 @@ public class Main {
         int k = Integer.parseInt(split[0]);
         int n = Integer.parseInt(split[1]);
         int[] arr = new int[k];
-        long left = 1; // 가능한 랜선의 범위
-        long right = 0x7fffffff;
+        long left = 1;
+        long right = -1;  // 가능한 랜선의 범위
         for(int i = 0; i < k; i++){
             arr[i] = Integer.parseInt(br.readLine());
+            right = Math.max(arr[i], right);
         }
-        // 1 - 457
         while(left < right){
-            long mid = (left + right) / 2 + 1; // target 길이
+            long mid = (left + right) / 2 + 1; // [g, g, g, g, b, b, b, b, b, b]  + 1 을 하는 이유는
+            // 구간이 5개/5개로 나눠진게 아니라 4개/6개로 나눠졌습니다. 이건 적절한 mid 값을 택하지 못해서 발생하는 문제인거고, 단지 정확히 절반으로 나누지 않기 때문에 다소 비효율적이라는 것에서 끝나는게 아니라 아예 일부 값에 대해서 아예 무한 루프에 빠질 수 있습니다.
             long cnt = 0;
             for(int i = 0; i < k; i++){
                 cnt += arr[i] / mid;
             }
             if(cnt < n){
                 right = mid - 1;
-            }else if(cnt == n){
-                left = mid;
-            }else if(cnt > n){
+            }else{
                 left = mid;
             }
         }
         System.out.println(left);
     }
 }
-
-// n = 11;
-// 802, 743, 457, 539
-// n개를 만들 수 있는 랜선의 최대 길이. -> n이 11에 가까워야 함.
