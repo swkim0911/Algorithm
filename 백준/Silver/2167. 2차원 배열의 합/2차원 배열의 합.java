@@ -11,11 +11,17 @@ public class Main {
         int n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
         int[][] arr = new int[n][m];
+        int[][] pSum = new int[n+1][m+1];
         for(int i = 0; i < n; i++){
             st = new StringTokenizer(br.readLine());
             for(int j = 0; j < m; j++){
                 arr[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
 
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j <= m; j++){
+                pSum[i][j] = arr[i-1][j-1] + pSum[i-1][j] + pSum[i][j-1] - pSum[i-1][j-1];
             }
         }
 
@@ -27,22 +33,15 @@ public class Main {
             int j = Integer.parseInt(st.nextToken());
             int x = Integer.parseInt(st.nextToken());
             int y = Integer.parseInt(st.nextToken());
-
-            int sum = 0;
-            for(int r = i - 1; r < x; r++){
-                for(int l = j - 1; l < y; l++){
-                    sum += arr[r][l];
-                }
-            }
-            sb.append(sum).append("\n");
+            sb.append(pSum[x][y] - pSum[x][j-1] - pSum[i-1][y] + pSum[i-1][j-1]).append("\n");
         }
         System.out.println(sb);
     }
 
     static void print(int[][] arr, int n, int m){
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i <= n; i++){
-            for(int j = 0; j <= m; j++){
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
                 sb.append(arr[i][j]+" ");
             }
             sb.append("\n");
