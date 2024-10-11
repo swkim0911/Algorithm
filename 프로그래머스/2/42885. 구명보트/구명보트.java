@@ -6,8 +6,8 @@ class Solution {
         for(int p : people){
             weights[p] += 1; // 몸무게 p인 사람 + 1
         }
-        for(int i = 240; i >= 0; i--){
-            while(weights[i] != 0){
+        for(int i = 0; i <= 240; i++){
+            while(weights[i] > 0){
                 weights[i]--;
                 answer++; 
                 for(int j = limit - i; j >= 0; j--){
