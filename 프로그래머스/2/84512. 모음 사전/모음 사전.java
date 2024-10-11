@@ -1,30 +1,38 @@
 import java.util.*;
 
-
 class Solution {
-
-    String[] alphabet = {"A", "E", "I", "O", "U"};
-    List<String> list = new ArrayList<>();
-
+    
+    ArrayList<String> list = new ArrayList<>();
+    HashSet<String> set = new HashSet<>();
+    String[] alphabet = {"", "A", "E", "I", "O", "U"};
+    
     public int solution(String word) {
         int answer = 0;
-        func(0, ""); // list에 // "" 도 포함됨
+        dfs(0,"");
         Collections.sort(list);
-        for (int i = 0; i < list.size(); i++) {
+        for(int i = 0; i < list.size(); i++){
             if(list.get(i).equals(word)){
-                answer = i;
+                answer = i+1;
                 break;
             }
         }
         return answer;
     }
     
-    public void func(int cnt, String word){
-        list.add(word);
-        if(cnt == 5) return;
-
+    public void dfs(int depth, String str){
+        if(depth == 5){
+            if(!set.contains(str) && !str.isEmpty()){
+                set.add(str);
+                list.add(str);            
+            }
+            return;
+        }
         for(int i = 0; i < alphabet.length; i++){
-            func(cnt+1, word+alphabet[i]);
+            dfs(depth + 1, str + alphabet[i]);
         }
     }
 }
+
+// "" A AA AAA AAAA AAAAA AE AEA AEAA AEAAA
+
+// 6^5
