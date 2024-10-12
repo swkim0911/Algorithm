@@ -1,45 +1,32 @@
 import java.util.*;
 
 class Solution {
-    
-    ArrayList<Integer>[] graph;
-    boolean[] isVisited;
-    
+        
     public int solution(int n, int[][] computers) {
         int answer = 0;
-        graph = new ArrayList[n];
-        isVisited = new boolean[n];
-        for(int i = 0; i < n; i++){
-            graph[i] = new ArrayList<>();
-            
-            for(int j = 0; j < n; j++){
-                if(i != j && computers[i][j] == 1){
-                    graph[i].add(j);
-                }
-            }
-        }
+        boolean[] visited = new boolean[n];
         
         for(int i = 0; i < n; i++){
-            if(!isVisited[i]){
-                bfs(i);
-                answer++;
-            }
+            if(visited[i]) continue;
+            bfs(i, computers, visited, n);
+            answer++;
         }
-        
         return answer;
     }
     
-    // bfs
-    public void bfs(int start){
+    public void bfs(int node, int[][] computers, boolean[] visited, int n){
         Queue<Integer> q = new LinkedList<>();
-        q.add(start);
-        isVisited[start] = true;
+        q.add(node);
+        
         while(!q.isEmpty()){
             int cur = q.poll();
-            for(int nxt : graph[cur]){
-                if(isVisited[nxt]) continue;
-                q.add(nxt);
-                isVisited[nxt] = true;
+            visited[cur] = true;
+            for(int i = 0; i < n; i++){
+                if(cur == i || visited[i]) continue; // 이미 방문했거나 노드가 자기자신일 때
+                if(computers[cur][i] == 1){
+                    visited[i] = true;
+                    q.add(i);
+                }
             }
         }
     }
