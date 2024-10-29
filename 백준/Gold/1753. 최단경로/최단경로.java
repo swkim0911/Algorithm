@@ -1,84 +1,105 @@
+import javax.print.attribute.standard.PrinterResolution;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.PriorityQueue;
-import java.util.stream.Stream;
+import java.util.StringTokenizer;
 
-/*
- * 다익스트라는 그래프에서 간선에 가중치가 존재할때 사용됨
- * 인접매트릭스, 인접리스트 둘 중하나를 input range에 따라 적절히 사용
- * 입력범위가크므로 리스트를 이용해서 품
- * */
-//시작점에 연결된 간선을 저장할 클래스선언
-class Edge implements Comparable<Edge>{
-	int i, v;
-	public Edge(int i, int v) {
-		this.i = i;
-		this.v = v;
-	}
-	// 우선순위 큐에서 사용시 최솟값 정렬
-	@Override
-	public int compareTo(Edge o) {
-		return this.v - o.v;
-	}	
+public class Main {
+
+    public static final int INF = Integer.MAX_VALUE / 2;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int v = Integer.parseInt(st.nextToken());
+        int e = Integer.parseInt(st.nextToken());
+        int start = Integer.parseInt(br.readLine());
+        ArrayList<Pair>[] graph = new ArrayList[v + 1];
+
+        for (int i = 0; i <= v; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        for (int i = 0; i < e; i++) {
+            st = new StringTokenizer(br.readLine());
+            int s = Integer.parseInt(st.nextToken());
+            int end = Integer.parseInt(st.nextToken());
+            int w = Integer.parseInt(st.nextToken());
+            graph[s].add(new Pair(end, w));
+        }
+
+        // 다익스트라
+        int[] d = new int[v + 1];// start v에서 각 v에 대한 최단 거리
+        for(int i = 1; i <= v; i++){
+            d[i] = INF;
+        }
+        d[start] = 0;
+        PriorityQueue<Pair> pq = new PriorityQueue<>((o1,o2) -> o1.dist - o2.dist);
+        pq.add(new Pair(start, 0));
+        while (!pq.isEmpty()) {
+            Pair cur = pq.poll();
+            if(d[cur.node] < cur.dist) continue;
+            for(Pair nxt : graph[cur.node]){
+                int nxtNode = nxt.node;
+                int nxtDist = cur.dist + nxt.dist;
+                if(nxtDist < d[nxtNode]){
+                    d[nxtNode] = nxtDist;
+                    pq.add(new Pair(nxtNode, nxtDist));
+                }
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for(int i = 1; i <= v; i++){
+            if(d[i] == INF){
+                sb.append("INF");
+            }else{
+                sb.append(d[i]);
+            }
+            sb.append("\n");
+        }
+        System.out.print(sb);
+    }
+
+    public static void dijkstra(int n, int start, int[][] graph){
+        int[] d = new int[n + 1]; // 시작점에서 각 노드까지 거리
+        boolean[] visited = new boolean[n + 1]; // 방문했다는 건 최단거리가 확장됐다는 거임
+        for(int i = 0; i <= n; i++){
+            d[i] = graph[start][i];
+        }
+        visited[start] = true;
+        for(int i = 0; i < n-2; i++){
+            //1. 최단 거리 찾기
+            int v = 0;
+            int min = Integer.MAX_VALUE;
+            for(int j = 1; j <= n; j++){
+                if(!visited[j]){
+                    if(d[j] < min){
+                        v = j;
+                        min = d[j];
+                    }
+                }
+            }
+            visited[v] = true;
+            //2. 최단 거리를 갖는 노드를 거치는 것과 원래 거리 비교해서 갱신
+            for(int j = 1; j <= n; j++) {
+                if(!visited[j]){
+                    if (d[v] + graph[v][j] < d[j]) {
+                        d[j] = d[v] + graph[v][j];
+                    }
+                }
+            }
+        }
+    }
 }
-public class Main{
-	// 전역적 접근이 필요한 변수 - 인접리스트 list, 결과거리 dist
-	static ArrayList<Edge> list[];
-	static int dist[]; 
-	
-	public static void main(String[] args) throws IOException {
-		// Scanner보다 BuggeredReader가 빠르고 효율적임
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		// input 받기
-		int[] in = Stream.of(br.readLine().split(" ")).mapToInt(Integer::parseInt).toArray(); 
-		int dot = in[0], line=in[1];
-		int start = Integer.parseInt(br.readLine());
-		
-		// input 받기 - 연결정보 저장
-		list = new ArrayList[dot+1]; // 편의상 0번은 사용하지 않을것이므로 +1
-		for(int i=1;i<list.length;i++) 
-			list[i] = new ArrayList<Edge>();
-		for(int i=0;i<line;i++) {            
-			String [] tt = br.readLine().split(" ");
-	        int a = Integer.parseInt(tt[0]);    //노드1
-	        int b = Integer.parseInt(tt[1]);    //노드2
-	        int w = Integer.parseInt(tt[2]);    // 거리
-	        list[a].add(new Edge(b,w));		
-		}
-			
-		
-		// start부터 각 dot으로 가는 최단거리를 저장할 결과배열 dist 선언 및 초기화
-		dist = new int[dot+1]; //input 특성상 0번을 사용하지 않으므로 + 1
-		Arrays.fill(dist, Integer.MAX_VALUE); // 최솟값을 구해야하므로 MAX값으로 초기화
-		dist[start] = 0; // 시작점 거리값
-		
-		// 다익스트라로 start에서 연결된 모른 경로값을 탐색
-		dijkstra(start);
-		
-		// 결과 출력문 (0번 제외)
-		for(int i=1;i<dist.length;i++) {
-			if(dist[i]== Integer.MAX_VALUE)
-				System.out.println("INF");
-			else
-				System.out.println(dist[i]);
-		}
-	}
-	private static void dijkstra(int s) {
-		PriorityQueue<Edge> pq = new PriorityQueue<Edge>(); //pq를 사용하면 최소값 기준으로 들어가기 때문에 연산이 줄어든다
-		pq.add(new Edge(s,0)); // 탐색 시작점
-		
-		while(!pq.isEmpty()) {
-			Edge now = pq.poll();
-			// 탐색할 점에 연결된 정보기반으로 dist 갱신
-			for(Edge next : list[now.i]) {
-				if(dist[next.i] > now.v + next.v) {
-					dist[next.i] = now.v + next.v;
-					pq.add(new Edge(next.i, dist[next.i]));
-				}
-			}			
-		}
-	}
+
+class Pair{
+    int node;
+    int dist;
+
+    public Pair(int node, int dist){
+        this.node = node;
+        this.dist = dist;
+    }
 }
