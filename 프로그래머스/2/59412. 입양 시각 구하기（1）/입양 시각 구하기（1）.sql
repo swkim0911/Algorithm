@@ -1,5 +1,5 @@
 select hour(datetime) as hour, count(*)
 from animal_outs
-where 9 <= hour(datetime) and hour(datetime) <= 19
+where hour(datetime) between 9 and 19
 group by hour(datetime)
 order by 1
