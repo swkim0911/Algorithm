@@ -13,20 +13,36 @@ public class Main {
             String[] split = br.readLine().split(" ");
             int m = Integer.parseInt(split[0]);
             int n = Integer.parseInt(split[1]);
-            int x = Integer.parseInt(split[2]) - 1;
-            int y = Integer.parseInt(split[3]) - 1;
-            boolean isOk = false;
-
-            for (int i = x; i < (n * m); i+= m) {
-                if(i % n == y){
-                    sb.append(i + 1).append("\n");
-                    isOk = true;
+            int x = Integer.parseInt(split[2]);
+            int y = Integer.parseInt(split[3]);
+            boolean check = false;
+            int lcm = (m * n) / gcd(m, n);
+            for(int i = x; i <= lcm; i += m){
+                int r = i % n;
+                if(r == 0){
+                    r = n;
+                }
+                if(r == y){
+                    sb.append(i).append("\n");
+                    check = true;
                     break;
                 }
-            }
 
-            if(!isOk) sb.append(-1).append("\n");
+            }
+            if(!check) sb.append(-1).append("\n");
         }
         System.out.print(sb);
+    }
+    
+    // 최대공약수
+    public static int gcd(int a, int b){
+        int r = 0;
+        while(b != 0){
+            r = a % b;
+            a = b;
+            b = r;
+        }
+
+        return a;
     }
 }
