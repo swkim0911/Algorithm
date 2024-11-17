@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public class Main {
 
     public static ArrayList<Integer>[] graph;
-    public static int[] p; // parent
-    public static int[] d; // depth
+    public static int[] p;
+    public static int[] d;
     public static boolean[] visited;
 
     public static void main(String[] args) throws IOException {
@@ -30,10 +30,7 @@ public class Main {
         p = new int[n + 1];
         d = new int[n + 1];
         visited = new boolean[n + 1];
-
-        // 1. 각 노드의 깊이를 구하기
         dfs(1, 0);
-
 
         int m = Integer.parseInt(br.readLine());
         for (int i = 0; i < m; i++) {
@@ -46,8 +43,8 @@ public class Main {
     }
 
     public static void dfs(int node, int depth){
-        visited[node] = true;
         d[node] = depth;
+        visited[node] = true;
 
         for(Integer next : graph[node]){
             if(visited[next]) continue;
@@ -56,11 +53,10 @@ public class Main {
         }
     }
 
-    // least common ancestor
     public static int lca(int a, int b){
-        // 먼저 깊이가 같은 노드로 이동
+        // 1. 두 노드의 깊이를 같게 올리기
         while(d[a] != d[b]){
-            if(d[a] < d[b]){
+            if(d[a] < d[b]){ // b의 깊이가 더 큰 경우 b를 올린다.
                 b = p[b];
             }else{
                 a = p[a];
@@ -71,7 +67,6 @@ public class Main {
             a = p[a];
             b = p[b];
         }
-
         return a;
     }
 }
