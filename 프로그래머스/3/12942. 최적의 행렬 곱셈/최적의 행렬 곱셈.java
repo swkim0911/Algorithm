@@ -6,18 +6,16 @@ class Solution {
     
     public int solution(int[][] matrix_sizes) {
         int n = matrix_sizes.length;
-        int[][] dp = new int[n][n]; // dp[x][y]: x번째 행렬에서 y번째 행렬까지 최소 곱셈 연산 수 (0 <= x,y <= n-1)
+        int[][] dp = new int[n][n]; // dp[x][y]: x번째 행렬부터 y번 행렬까지에서 최소 연산 수
         for(int[] row : dp){
             Arrays.fill(row, INF);
         }
-        
         for(int i = 0; i < n; i++){
             dp[i][i] = 0;
         }
-        
-        for(int i = 1; i < n; i++){
-            for(int s = 0; s < n; s++){
-                int e = s + i;
+        for(int g = 1; g < n; g++){ // gap
+            for(int s = 0; s < n; s++){ // 시작 배열 idx
+                int e = s+g; // 끝 배열 idx
                 if(e >= n) break;
                 
                 for(int m = s; m < e; m++){
@@ -25,10 +23,6 @@ class Solution {
                 }
             }
         }
-        
         return dp[0][n-1];
     }
 }
-
-// 5 3 10 + 5 10 6 = 450
-// 5 3 6 + 3 10 6 = 270
