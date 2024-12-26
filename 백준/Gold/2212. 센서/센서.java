@@ -23,7 +23,7 @@ public class Main {
             resultList.add(list.get(i + 1) - list.get(i));
         }
         resultList.sort((o1, o2) -> o2 - o1);
-        long answer = 0L;
+        int answer = 0;
         for (int i = k - 1; i < resultList.size(); i++) {
             answer += resultList.get(i);
         }
