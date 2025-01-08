@@ -40,6 +40,6 @@ public class Main {
                 ans = mid;
             }
         }
-        System.out.println(ans);
+        System.out.println(left - 1);
     }
 }
