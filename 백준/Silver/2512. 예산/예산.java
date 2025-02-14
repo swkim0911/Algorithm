@@ -27,7 +27,7 @@ public class Main {
                 left = mid;
             }
         }
-        System.out.println(right);
+        System.out.println(left);
     }
 
     public static int getTotal(int[] arr, int mid) {
