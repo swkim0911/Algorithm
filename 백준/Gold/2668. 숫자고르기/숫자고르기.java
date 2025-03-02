@@ -35,11 +35,9 @@ public class Main {
     }
 
     public static void dfs(int node) {
-        boolean[] v = new boolean[n + 1]; // 첫째 줄 방문 유무
         Set<Integer> top = new HashSet<>();
         Set<Integer> bottom = new HashSet<>();
-        while (!v[node] && !visited[node]) {
-            v[node] = true;
+        while (!top.contains(node) && !visited[node]) {
             top.add(node);
             node = graph[node];
             bottom.add(node);
@@ -61,6 +59,3 @@ public class Main {
 
     }
 }
-// 1 2 3 4
-// 2 3 4 2
-//
