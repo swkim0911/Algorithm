@@ -28,21 +28,18 @@ public class Main {
         }
         for (int s = 1; s <= n; s++) {
             visited = new boolean[n + 1];
-            visited[s] = true;
             dfs(s, 0);
-            visited[s] = false;
         }
         System.out.println(answer);
     }
 
     public static void dfs(int node, int sum) {
+        visited[node] = true;
         answer = Math.max(answer, sum);
 
         for (Data nxt : tree[node]) {
             if(visited[nxt.to]) continue;
-            visited[nxt.to] = true;
             dfs(nxt.to, sum + nxt.w);
-            visited[nxt.to] = false;
         }
     }
 }
