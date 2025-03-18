@@ -13,31 +13,15 @@ public class Main {
         int y = Integer.parseInt(split[1]);
         int w = Integer.parseInt(split[2]);
         int s = Integer.parseInt(split[3]);
-        long answer = 0;
-        while(x >= 1 && y >= 1) {
-            if (2 * w < s) {
-                answer += 2 * w;
-            } else {
-                answer += s;
-            }
-            x--;
-            y--;
-        }
-        while(x >= 2) {
-            answer += Math.min(2 * w, 2 * s);
-            x -= 2;
-        }
-        while(y >= 2) {
-            answer += Math.min(2 * w, 2 * s);
-            y -= 2;
-        }
-        if (x == 1) {
-            answer += w;
-        }
-        if (y == 1) {
+
+        int min = Math.min(x, y);
+        int max = Math.max(x, y);
+        int remain = max - min;
+        long answer = min * (long) Math.min(2*w, s);
+        answer += ((remain / 2) * 2) * (long) Math.min(w,s);
+        if(remain % 2 == 1){
             answer += w;
         }
         System.out.println(answer);
     }
 }
-
