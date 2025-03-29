@@ -1,9 +1,4 @@
 def solution(myString, pat):
-    text = ''
-    for s in myString:
-        if s == 'A':
-            text += 'B'
-        else:
-            text += 'A'
+    text = myString.translate(str.maketrans('AB','BA'))
     
     return int(pat in text)
