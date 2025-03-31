@@ -29,6 +29,9 @@ answer = ''
 t = int(sys.stdin.readline().strip())
 for _ in range(t):
     s = sys.stdin.readline().strip()
-    answer += str(solve(s)) + "\n"
+    if is_pal(s):
+        answer += str(0) + " \n"
+    else:
+        answer += str(solve(s)) + "\n"
 
 print(answer)
