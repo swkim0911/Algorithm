@@ -8,8 +8,9 @@ def getCnt(color, board, r, c):
         for j in range(c, c + 8):
             if color != board[i][j]:
                 cnt += 1
-            if j != c + 7:
-                color = 'B' if color == 'W' else 'W'
+            color = 'W' if color == 'B' else 'B'
+            
+        color = 'W' if color == 'B' else 'B'
 
     return cnt
 
