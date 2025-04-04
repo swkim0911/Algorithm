@@ -2,35 +2,37 @@ import sys
 import heapq
 
 input = sys.stdin.readline
+
 INF = float('inf')
 
 n = int(input())
 m = int(input())
 
-graph = [[] for _ in range(n + 1)]
+graph = [[] for _ in range(n+1)]
 
 for _ in range(m):
-    s, e, d = map(int, input().split())
-    graph[s].append((e, d))  # (목적지, 거리) 튜플 저장
+    s, e, w = map(int, input().split(' '))
+    graph[s].append((e, w))
 
-start, end = map(int, input().split())
+start, end = map(int, input().split(' '))
 
-# 다익스트라 알고리즘
-pq = []
-dist = [INF] * (n + 1)
-dist[start] = 0
-heapq.heappush(pq, (0, start))  # (거리, 노드) 형태로 저장
+heap = []
+dist = [INF] * (n+1)
+heapq.heappush(heap, (0, start))
 
-while pq:
-    cur_dist, cur_node = heapq.heappop(pq)
-    
-    if dist[cur_node] < cur_dist:
+while heap:
+    d, v = heapq.heappop(heap)
+    if dist[v] < d:
         continue
-    
-    for next_node, next_dist in graph[cur_node]:
-        new_distance = cur_dist + next_dist
-        if new_distance < dist[next_node]:
-            dist[next_node] = new_distance
-            heapq.heappush(pq, (new_distance, next_node))
+
+    for nxt_v, nxt_w in graph[v]:
+        next_distance = d + nxt_w
+
+        if next_distance < dist[nxt_v]:
+            dist[nxt_v] = next_distance
+            heapq.heappush(heap, (dist[nxt_v], nxt_v))
 
 print(dist[end])
+
+
+# 다익스트라
