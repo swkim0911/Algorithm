@@ -1,15 +1,13 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.PriorityQueue;
+import java.util.*;
+import java.io.*;
 
 public class Main {
 
-    public static final int INF = Integer.MAX_VALUE / 2;
+    static final int INF = Integer.MAX_VALUE / 2;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
         int n = Integer.parseInt(br.readLine());
         int m = Integer.parseInt(br.readLine());
         ArrayList<Pair>[] graph = new ArrayList[n + 1];
@@ -17,47 +15,46 @@ public class Main {
             graph[i] = new ArrayList<>();
         }
         for (int i = 0; i < m; i++) {
-            String[] split = br.readLine().split(" ");
-            int s = Integer.parseInt(split[0]);
-            int e = Integer.parseInt(split[1]);
-            int d = Integer.parseInt(split[2]);
+            st = new StringTokenizer(br.readLine());
+            int s = Integer.parseInt(st.nextToken());
+            int e = Integer.parseInt(st.nextToken());
+            int d = Integer.parseInt(st.nextToken());
             graph[s].add(new Pair(e, d));
         }
-
-        String[] split = br.readLine().split(" ");
-        int start = Integer.parseInt(split[0]);
-        int end = Integer.parseInt(split[1]);
-        PriorityQueue<Pair> pq = new PriorityQueue<>((o1, o2) -> o1.dist - o2.dist); // 거리 기준으로 오름차순 정렬
-        int[] d = new int[n + 1];
-        for (int i = 0; i <= n; i++) {
-            d[i] = INF;
-        }
-        d[start] = 0;
+        st = new StringTokenizer(br.readLine());
+        int start = Integer.parseInt(st.nextToken());
+        int end = Integer.parseInt(st.nextToken());
+        PriorityQueue<Pair> pq = new PriorityQueue<>((o1, o2) -> o1.d - o2.d);
         pq.add(new Pair(start, 0));
+        int[] distance = new int[n + 1]; // distance[x]: start에서 x까지 최소 거리
+        Arrays.fill(distance, INF);
+        distance[start] = 0;
 
         while (!pq.isEmpty()) {
             Pair cur = pq.poll();
-            if(d[cur.node] < cur.dist) continue;
+            if(distance[cur.v] < cur.d) continue;
 
-            for(Pair next : graph[cur.node]){
-                int nextDistance = cur.dist + next.dist;
-                if (nextDistance < d[next.node]) {
-                    d[next.node] = nextDistance;
-                    pq.add(new Pair(next.node, nextDistance));
+            for(Pair nxt : graph[cur.v]){
+                int nextDistance = cur.d + nxt.d;
+                if(nextDistance < distance[nxt.v]){
+                    distance[nxt.v] = nextDistance;
+                    pq.add(new Pair(nxt.v, nextDistance));
                 }
             }
         }
 
-        System.out.print(d[end]);
+        System.out.println(distance[end]);
     }
 }
 
 class Pair{
-    int node;
-    int dist;
+    int v; // vertex
+    int d; // distance
 
-    public Pair(int n, int d) {
-        this.node = n;
-        this.dist = d;
+    public Pair(int v, int d){
+        this.v = v;
+        this.d = d;
     }
+
 }
+
