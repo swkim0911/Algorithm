@@ -1,77 +1,78 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.PriorityQueue;
+import java.util.*;
+import java.io.*;
 
 
 public class Main {
 
+    public static final int INF = Integer.MAX_VALUE / 2;
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] split = br.readLine().split(" ");
-        int v = Integer.parseInt(split[0]);
-        int e = Integer.parseInt(split[1]);
-        PriorityQueue<Data> pq = new PriorityQueue<>((o1,o2) -> o1.w - o2.w); // weight 기준으로 오름차순
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int v = Integer.parseInt(st.nextToken());
+        int e = Integer.parseInt(st.nextToken());
 
+        PriorityQueue<Pair> pq = new PriorityQueue<>((o1,o2) -> o1.c - o2.c);
         for (int i = 0; i < e; i++) {
-            split = br.readLine().split(" ");
-            int start = Integer.parseInt(split[0]);
-            int end = Integer.parseInt(split[1]);
-            int weight = Integer.parseInt(split[2]);
-            pq.add(new Data(start, end, weight));
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
+            pq.add(new Pair(a, b, c));
         }
-        
-        int[] arr = new int[v + 1]; // arr[x]: 정점 x의 부모. 자기 자신이 부모이면 Root
-        for(int i = 1; i <= v; i++){
-            arr[i] = i;
+        int[] parents = new int[v+1]; // parents[x]: x노드의 부모 노드
+        for(int i = 0; i <= v; i++){
+            parents[i] = i; // 초기화
         }
 
         int answer = 0;
-        int cnt = 0;
-        // 크루스칼 알고리즘
-        // 1. weight 가 작은 것들을 먼저 뽑기.
-        // 2. 뽑았을 때 두 정점이 같은 그룹이 아니면 포함
-        while(cnt != v-1){
-            Data data = pq.poll();
-            if(!isGroup(data.s, data.e, arr)){
-                cnt++;
-                union(data.s, data.e, arr);
-                answer += data.w;
+        int time = 0;
+        while (true){
+            if(time == v-1) break;
+            Pair cur = pq.poll();
+            if(isDiffGroup(cur.a, cur.b, parents)){
+                union(cur.a, cur.b, parents);
+                answer += cur.c;
+                time += 1;
             }
         }
         System.out.println(answer);
     }
 
-    public static boolean isGroup(int v1, int v2, int[] arr){
-        int p1 = getParent(v1, arr);
-        int p2 = getParent(v2, arr);
-        return p1 == p2; // 부모가 같으면 같은 그룹
+    public static int getParent(int v, int[] p){
+        if(p[v] == v) return v;
+
+        return p[v] = getParent(p[v], p);
     }
 
-    public static int getParent(int v, int[] arr){
-        if(arr[v] == v) return v;
-        return arr[v] = getParent(arr[v], arr);
+    public static void union(int x, int y, int[] p){
+        int p1 = getParent(x, p);
+        int p2 = getParent(y, p);
+        if(p1 < p2){
+            p[p2] = p1;
+        }else{
+            p[p1] = p2;
+        }
     }
 
-    public static void union(int v1, int v2, int[] arr){
-        int p1 = getParent(v1, arr);
-        int p2 = getParent(v2, arr);
-        if(p1 < p2) arr[p2] = p1;
-        else arr[p1] = p2;
+    public static boolean isDiffGroup(int x, int y, int[] p){
+        int p1 = getParent(x, p);
+        int p2 = getParent(y, p);
+        return p1 != p2;
     }
 
+    static class Pair{
+        int a;
+        int b;
+        int c;
 
+        public Pair(int a, int b, int c){
+            this.a = a;
+            this.b = b;
+            this.c = c;
+        }
+    }
 }
 
-class Data{
-    int s;
-    int e;
-    int w;
 
-    public Data(int s, int e, int w){
-        this.s = s;
-        this.e = e;
-        this.w = w;
-    }
-}
+
