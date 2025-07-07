@@ -18,9 +18,6 @@ for i, v in enumerate(arr):
                 visited[nxt] = True
                 break
 
-answer = 0
-for v in visited:
-    if v:
-        answer += 1
+answer = sum(visited)
 
 print(answer)
