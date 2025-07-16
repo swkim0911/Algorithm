@@ -24,20 +24,20 @@ public class Main {
             if(oneHalf == 0) break;
             char c = s.charAt(i);
             if (c == '1') {
-                s = s.substring(0, i) + s.substring(i + 1);
+                s = s.substring(0, i) + "_" + s.substring(i + 1);
                 oneHalf -= 1;
             }
         }
-
         for (int i = s.length() - 1; i >= 0; i--) {
             if(zeroHalf == 0) break;
             char c = s.charAt(i);
             if (c == '0') {
-                s = s.substring(0, i) + s.substring(i + 1);
                 zeroHalf -= 1;
+                s = s.substring(0, i) + "_" + s.substring(i + 1);
             }
         }
-        System.out.println(s);
+        System.out.println(s.replace("_", ""));
+
     }
     // 1은 앞에있는 1을 없애고, 0은 뒤에 있는 0을 없애자
 
