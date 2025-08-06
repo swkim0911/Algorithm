@@ -23,9 +23,6 @@ public class Main {
         }
 
         Collections.sort(lines, (o1, o2) -> {
-            if(o1.x == o2.x){
-                return o1.y - o2.y;
-            }
             return o1.x - o2.x;
         });
         int min = lines.get(0).x;
