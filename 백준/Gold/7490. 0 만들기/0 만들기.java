@@ -3,80 +3,60 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 
 public class Main {
 
-    static StringBuilder sb = new StringBuilder();
-    static char[] opArr = {'+', '-', ' '};
-    static ArrayList<String> list;
+    static int n;
+    static List<String> result = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
         int t = Integer.parseInt(br.readLine());
         while (t-- > 0) {
-            int n = Integer.parseInt(br.readLine());
-            list = new ArrayList<>();
-            dfs(n, new ArrayList<>());
-            list.sort(String::compareTo);
-            list.forEach(s -> sb.append(s).append("\n"));
+            n = Integer.parseInt(br.readLine());
+            result.clear();
+            dfs(1, "1");
+            Collections.sort(result);
+            result.forEach(s -> sb.append(s).append("\n"));
             sb.append("\n");
         }
 
         System.out.print(sb);
     }
 
-    public static void dfs(int n, ArrayList<Character> ops) {
-        if (ops.size() == n - 1) {
-            String expression = "1";
-            int next = 2;
-            for (Character c : ops) {
-                expression += c + String.valueOf(next);
-                next += 1;
-            }
-            int result = calc(expression);
-            if(result == 0){
-                list.add(expression);
+    public static void dfs(int depth, String expression) {
+        if (depth == n) {
+            if (evaluate(expression.replace(" ", "")) == 0) {
+                result.add(expression);
             }
             return;
         }
-        // +, -, ' '
-        for (int i = 0; i < 3; i++) {
-            ops.add(opArr[i]);
-            dfs(n, ops);
-            ops.remove(ops.size() - 1);
-        }
-
+        int next = depth + 1;
+        dfs(next, expression + " " + next);
+        dfs(next, expression + "+" + next);
+        dfs(next, expression + "-" + next);
     }
-
-    private static int calc(String str) {
-        str = str.replace(" ", ""); // 공백지우기
-        ArrayList<Integer> numbers = new ArrayList<>();
-        ArrayList<Character> ops = new ArrayList<>();
-        String tmp = "";
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-            if (c >= '0' && c <='9') {
-                tmp += c;
-            } else {
-                numbers.add(Integer.parseInt(tmp));
-                tmp = "";
-                ops.add(c);
+    // 12 - 34
+    private static int evaluate(String expr) {
+        int sum = 0;
+        int num = 0;
+        char sign = '+';
+        for (int i = 0; i < expr.length(); ) {
+            int j = i;
+            while (j < expr.length() && Character.isDigit(expr.charAt(j))) {
+                j++;
             }
+            num = Integer.parseInt(expr.substring(i, j));
+            if (sign == '+') {
+                sum += num;
+            }else if(sign == '-') sum -= num;
+            if(j < expr.length()) sign = expr.charAt(j);
+            i = j + 1;
         }
 
-        numbers.add(Integer.parseInt(tmp));
-
-        int result = numbers.get(0);
-        for (int i = 1; i < numbers.size(); i++) {
-            Character op = ops.get(i - 1);
-            Integer number = numbers.get(i);
-            if (op == '+') {
-                result += number;
-            } else if (op == '-') {
-                result -= number;
-            }
-        }
-        return result;
+        return sum;
     }
 }
