@@ -6,6 +6,6 @@
 
 ### Greedy
 - [보석 도둑](https://www.acmicpc.net/problem/1202)
-
+- [강의실 배정](https://www.acmicpc.net/problem/11000)
 ### bfs
 - [뱀과 사다리 게임](https://www.acmicpc.net/problem/16928)
