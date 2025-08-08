@@ -8,40 +8,34 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        long[] arr = new long[N];
+        int n = Integer.parseInt(br.readLine());
+        int[] arr = new int[n];
         StringTokenizer st = new StringTokenizer(br.readLine());
-        for(int i = 0; i < N; i++){
-            arr[i] = Long.parseLong(st.nextToken());
+        for(int i = 0; i < n; i++){
+            arr[i] = Integer.parseInt(st.nextToken());
         }
+        Arrays.sort(arr); // 오름차순 정렬
 
-        Arrays.sort(arr);
-
-        long minSum = Long.MAX_VALUE;
-        long a = 0, b = 0, c = 0;
-
-        for(int i = 0; i < N - 2; i++){
+        long minVal = Long.MAX_VALUE;
+        int[] ans = new int[3];
+        for (int i = 0; i < n - 2; i++) {
             int left = i + 1;
-            int right = N - 1;
-
-            while(left < right){
-                long sum = arr[i] + arr[left] + arr[right];
-
-                if(Math.abs(sum) < minSum){
-                    minSum = Math.abs(sum);
-                    a = arr[i];
-                    b = arr[left];
-                    c = arr[right];
+            int right = n - 1;
+            while (left < right) {
+                long sum = (long)arr[i] + arr[left] + arr[right];
+                if (Math.abs(sum) < Math.abs(minVal)) {
+                    ans[0] = arr[i];
+                    ans[1] = arr[left];
+                    ans[2] = arr[right];
+                    minVal = sum;
                 }
-
-                if(sum < 0){
-                    left++;
+                if (sum < 0) {
+                    left += 1;
                 } else {
-                    right--;
+                    right -= 1;
                 }
             }
         }
-
-        System.out.println(a + " " + b + " " + c);
+        System.out.println(ans[0] + " " + ans[1] + " " + ans[2]);
     }
 }
