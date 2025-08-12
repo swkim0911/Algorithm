@@ -9,44 +9,40 @@ public class Main {
         int n = Integer.parseInt(br.readLine());
         char[] start = br.readLine().toCharArray();
         char[] target = br.readLine().toCharArray();
+
         int result1 = simulate(n, start, target, false);
         int result2 = simulate(n, start, target, true);
-
         int answer = Math.min(result1, result2);
 
         System.out.println(answer == Integer.MAX_VALUE ? -1 : answer);
-
+        
     }
 
-    static int simulate(int n, char[] start, char[] target, boolean pressFirst) {
+    static int simulate(int n, char[] start, char[] target, boolean firstPress){
         char[] cur = start.clone();
         int cnt = 0;
-
-        if (pressFirst) {
+        if (firstPress) {
             press(cur, 0);
-            cnt += 1;
+            cnt +=1;
         }
-
-        for (int i = 1; i < n; i++) {
-            if (cur[i - 1] != target[i - 1]) {
-                press(cur, i);
+        for (int p = 1; p < n; p++) {
+            if (cur[p - 1] != target[p - 1]) {
+                press(cur, p);
                 cnt += 1;
             }
         }
-        for (int i = 0; i < n; i++) {
-            if(cur[i] != target[i]) return Integer.MAX_VALUE;
-
-        }
+        cnt = cur[n - 1] != target[n - 1] ? Integer.MAX_VALUE : cnt;
         return cnt;
-
     }
 
     static void press(char[] arr, int p) {
         int n = arr.length;
+
         for (int i = p - 1; i <= p + 1; i++) {
-            if (0 <= i && i < n) { // 범위안에 있으면
-                arr[i] = (arr[i] == '0') ? '1' : '0';
+            if (0 <= i && i < n) {
+                arr[i] = (arr[i] == '0' ? '1' : '0');
             }
         }
+
     }
 }
