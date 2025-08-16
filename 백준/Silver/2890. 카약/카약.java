@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-    
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -18,16 +18,16 @@ public class Main {
         }
 
         for (int j = col - 2; j >= 1; j--) {
-            boolean flag = false;
+            boolean updated = false;
             for (int i = 0; i < row; i++) {
                 char c = board[i][j];
                 if((c >= '1' && c <= '9') && ranks[c - '0'] == 0){
                     ranks[c - '0'] = rank;
-                    flag = true;
+                    updated = true;
                 }
             }
 
-            if(flag) rank += 1;
+            rank += updated ? 1 : 0;
         }
         for (int i = 1; i < ranks.length; i++) {
             System.out.println(ranks[i]);
