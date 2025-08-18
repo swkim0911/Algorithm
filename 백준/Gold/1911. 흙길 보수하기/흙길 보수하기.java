@@ -32,7 +32,7 @@ public class Main {
             if(cur.e <= right) continue;
             int cnt;
             if(right <= cur.s){
-                cnt = ((cur.e - cur.s) + (l - 1)) / l;
+                cnt = ((cur.e - cur.s) + (l - 1)) / l; // cur.e - cur.s -> 덮어야 하는 영역의 넓이. // (l-1) -> 올림을 위한 장치
                 right = cur.s + (l * cnt);
             }else{
                 cnt = ((cur.e - right) + (l - 1)) / l;
@@ -44,8 +44,6 @@ public class Main {
 
         System.out.println(answer);
     }
-
-    // 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
 
     static class Puddle {
         int s,e;
