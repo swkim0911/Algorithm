@@ -3,6 +3,9 @@
 ### TREE
 - [도넛과 막대 그래프](https://school.programmers.co.kr/learn/courses/30/lessons/258711)
 
+### Graph
+- [효율적인 해킹](https://www.acmicpc.net/problem/1325)
+  - ㅊ
 
 ### Greedy
 - [보석 도둑](https://www.acmicpc.net/problem/1202)
