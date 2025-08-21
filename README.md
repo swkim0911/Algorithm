@@ -5,7 +5,7 @@
 
 ### Graph
 - [효율적인 해킹](https://www.acmicpc.net/problem/1325)
-  - ㅊ
+  - cycle이 있는 graph에는 메모이제이션 불가능
 
 ### Greedy
 - [보석 도둑](https://www.acmicpc.net/problem/1202)
