@@ -1,37 +1,39 @@
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
 
 class Solution {
     public int[] solution(int[][] edges) {
-        Map<Integer, int[]> nodeCnt = new HashMap<>(); // key: node, value: int[0]-> 나가는 엣지 수, int[1]-> 들어오는 엣지 수
-        int[] answer = {0, 0, 0, 0};
-        Arrays.stream(edges).forEach(edge -> {
+        int[] answer = new int[4];
+        HashMap<Integer, int[]> degreeInfoMap = new HashMap<>(); // 
+        for(int[] edge : edges){
             int a = edge[0];
             int b = edge[1];
-            if (!nodeCnt.containsKey(a)) {
-                nodeCnt.put(a, new int[]{0, 0});
+            if(!degreeInfoMap.containsKey(a)){
+                degreeInfoMap.put(a, new int[2]);
             }
-            if (!nodeCnt.containsKey(b)) {
-                nodeCnt.put(b, new int[]{0, 0});
+            if(!degreeInfoMap.containsKey(b)){
+                degreeInfoMap.put(b, new int[2]);
             }
-            nodeCnt.get(a)[0] += 1;
-            nodeCnt.get(b)[1] += 1;
-        });
-
-        int[] cnts;
-        for (Integer key : nodeCnt.keySet()) {
-            cnts = nodeCnt.get(key);
-            if (cnts[0] >= 2 && cnts[1] == 0) { // 나가는 엣지가 2개 이상, 들어오는 엣지 0개
-                answer[0] = key;
-            } else if (cnts[0] == 0) { // 나가는 엣지 0개
-                answer[2]++;
-            } else if (cnts[0] == 2 && cnts[1] >= 2) { // 나가는 엣지 2개, 들어오는 엣지 2개 이상(생성된 정점 고려)
-                answer[3]++;
+            degreeInfoMap.get(a)[0] += 1;
+            degreeInfoMap.get(b)[1] += 1;
+        }
+        int created = 0;
+        for(Map.Entry<Integer, int[]> entry : degreeInfoMap.entrySet()){
+            int vertex = entry.getKey();
+            int[] degreeInfo = entry.getValue();
+            int out = degreeInfo[0]; // 나가는 degree
+            int in = degreeInfo[1]; // 들어오는 degree
+            if(out >= 2 && in == 0){
+                created = vertex;
+            }else if(out == 2 && in >= 2){
+                answer[3] += 1;
+            }else if(out == 0){
+                answer[2] += 1;
             }
         }
-        int total = nodeCnt.get(answer[0])[0]; // 생성된 정점의 나가는 엣지 수가 전체 그래프 수와 같다.
-        answer[1] = total - answer[2] - answer[3];
+        answer[0] = created;
+        answer[1] = degreeInfoMap.get(created)[0] - (answer[2] + answer[3]);
+        
         return answer;
     }
 }
