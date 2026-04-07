@@ -5,59 +5,68 @@ import java.util.*;
 
 public class Main {
 
-    static int INF = Integer.MAX_VALUE / 2;
+    static final int INF = Integer.MAX_VALUE / 2;
 
     public static void main(String[] args) throws IOException {
+
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int v = Integer.parseInt(st.nextToken());
-        int e = Integer.parseInt(st.nextToken());
-        int k = Integer.parseInt(br.readLine());
-        ArrayList<Pair>[] graph = new ArrayList[v + 1]; //graph[x]: x에서 시작하는 간선들
-        for (int i = 1; i <= v; i++) {
+        int V = Integer.parseInt(st.nextToken());
+        int E = Integer.parseInt(st.nextToken());
+        int K = Integer.parseInt(br.readLine());
+
+        ArrayList<Node>[] graph = new ArrayList[V+1]; // graph[x]: x에서 시작하는 간선들 정보
+        for(int i = 0; i < V + 1; i++){
             graph[i] = new ArrayList<>();
         }
-
-        for (int i = 0; i < e; i++) {
+        // 0. 그래프 구성하기
+        for(int i = 0; i < E; i++){
             st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            int c = Integer.parseInt(st.nextToken());
-            graph[a].add(new Pair(b, c));
+            int u = Integer.parseInt(st.nextToken());
+            int v = Integer.parseInt(st.nextToken());
+            int w = Integer.parseInt(st.nextToken());
+            graph[u].add(new Node(v, w));
         }
-        int[] dist = new int[v + 1]; // dist[x]: k에서 x까지 최단 거리
-        PriorityQueue<Pair> pq = new PriorityQueue<>((o1,o2) -> o1.c - o2.c);
+        // 1. 다익스트라 알고리즘
+        int[] dist = new int[V+1];
         Arrays.fill(dist, INF);
-        dist[k] = 0;
-        pq.add(new Pair(k, 0));
-        while (!pq.isEmpty()) {
-            Pair cur = pq.poll();
-            for (Pair nxt : graph[cur.b]) {
-                int nextDist = cur.c + nxt.c;
+        dist[K] = 0;
 
-                if (nextDist < dist[nxt.b]) {
-                    dist[nxt.b] = nextDist;
-                    pq.add(new Pair(nxt.b, nextDist));
+        // 1.1 pq 초기화
+        PriorityQueue<Node> pq = new PriorityQueue<>((o1,o2) -> {
+            return o1.weight - o2.weight;
+        });
+        pq.add(new Node(K, 0));
+
+        while (!pq.isEmpty()) {
+            Node cur = pq.poll();
+            if(dist[cur.to] < cur.weight) continue; // 고려 대상이 이전 기록보다 이미 큰 경우는 볼 필요가 없다
+
+            for(Node nxt : graph[cur.to]){
+                int nxtDistance = cur.weight + nxt.weight;
+                if(nxtDistance < dist[nxt.to]){
+                    dist[nxt.to] = nxtDistance;
+                    pq.add(new Node(nxt.to, nxtDistance));
                 }
             }
         }
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i <= v; i++) {
-            sb.append(dist[i] == INF ? "INF" : dist[i]).append("\n");
+
+        for(int i = 1; i <= V; i++){
+            if(dist[i] == INF){
+                    System.out.println("INF");
+            }else{
+                System.out.println(dist[i]);
+            }
         }
-        System.out.print(sb);
-
-
-
     }
+}
 
-    static class Pair{
-        int b;
-        int c;
+class Node{
+    int to;
+    int weight;
 
-        public Pair(int b, int c) {
-            this.b = b;
-            this.c = c;
-        }
+    public Node(int t, int w){
+        this.to = t;
+        this.weight = w;
     }
 }
